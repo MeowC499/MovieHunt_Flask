@@ -110,5 +110,9 @@ def feedback():
     return render_template("thankyou.html")
 
 if __name__ == "__main__":
-    logging.info("Starting Flask server on http://127.0.0.1:5000")
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)
+    logging.info(f"Server running on port {port}")
+    logging.info("Flask app started.")
+    logging.info("App is ready to receive requests.")

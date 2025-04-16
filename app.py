@@ -4,9 +4,8 @@ import torch
 import torch.nn as nn
 import os
 import logging
-from data_downloader import download_data
-download_data()
 
+from data_downloader import download_data
 from model.ncf_model import NCF
 from model.utils import load_data
 
@@ -15,32 +14,46 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 app = Flask(__name__)
 
-# Load data and model
-logging.info("Loading data and model...")
-data = load_data()
-model = NCF(
-    num_users=len(data['user_to_index']),
-    num_movies=len(data['movie_to_index']),
-    latent_dim=100,
-    hidden_dims=[256, 128, 64],
-    dropout_rate=0.3,
-    use_batchnorm=True
-)
-model_path = "data/ncf_model_state.pth"
-if os.path.exists(model_path):
-    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
-    model.eval()
-    logging.info("Model loaded successfully.")
-else:
-    logging.warning("Model not found. Running in dummy mode.")
-    model = None
+data = None
+model = None
+
+def initialize_app():
+    global data, model
+
+    if data is None or model is None:
+        logging.info("Initializing application: checking data and model...")
+
+        download_data()  # Only downloads missing files, doesn’t duplicate
+        logging.info("Loading data...")
+        data = load_data()
+
+        model_path = "data/ncf_model_state.pth"
+        model = NCF(
+            num_users=len(data['user_to_index']),
+            num_movies=len(data['movie_to_index']),
+            latent_dim=100,
+            hidden_dims=[256, 128, 64],
+            dropout_rate=0.3,
+            use_batchnorm=True
+        )
+
+        if os.path.exists(model_path):
+            model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+            model.eval()
+            logging.info("Model loaded successfully.")
+        else:
+            logging.warning("Model not found. Running in dummy mode.")
+            model = None
+
 
 @app.route("/", methods=["GET"])
 def index():
+    initialize_app()
     return render_template("index.html", titles=data['all_movies']['title'].dropna().tolist())
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
+    initialize_app()
     username = request.form.get("username")
     selected_titles = request.form.getlist("favorites")
     logging.info(f"Received input - username: {username}, favorites: {selected_titles}")
@@ -54,7 +67,6 @@ def recommend():
         optimizer = torch.optim.Adam([user_embedding], lr=0.01)
         device = torch.device("cpu")
 
-        # Update embedding based on selected favorites
         for title in selected_titles:
             movie_row = data['all_movies'][data['all_movies']['title'] == title]
             if not movie_row.empty:
@@ -74,7 +86,6 @@ def recommend():
                         loss.backward()
                         optimizer.step()
 
-        # Predict for all other movies
         count_valid = 0
         for idx, row in data['all_movies'].iterrows():
             mid = data['movie_to_index'].get(row['movieId'])
@@ -108,13 +119,9 @@ def feedback():
     with open("data/user_feedback.csv", "a", encoding="utf-8") as f:
         f.write(f"{username},{selected_movies},{feedback}\n")
 
-
     return render_template("thankyou.html")
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host="0.0.0.0", port=port)
-    logging.info(f"Server running on port {port}")
-    logging.info("Flask app started.")
-    logging.info("App is ready to receive requests.")
+    logging.info(f"Flask app starting on port {port}")
+    app.run(host="0.0.0.0", port=port)

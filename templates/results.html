@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MovieHunt - Recommendations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h3 {
+            text-align: center;
+            color: #444;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #e3f2fd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 1.1em;
+        }
+        form {
+            margin-top: 30px;
+            text-align: center;
+        }
+        select, button {
+            padding: 10px;
+            font-size: 1em;
+        }
+        button {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Top 20 Movie Recommendations for {{ username }}</h1>
+
+        {% if recommendations %}
+        <ul>
+            {% for title, score in recommendations %}
+                <li><strong>{{ title }}</strong> </li>
+            {% endfor %}
+        </ul>
+
+        <form method="POST" action="/feedback">
+            <input type="hidden" name="username" value="{{ username }}">
+            <input type="hidden" name="favorites" value="{{ favorites }}">
+            <label for="feedback"><h3>How do you like your recommendations?</h3></label>
+            <select name="feedback" id="feedback">
+                <option value="Loved them! 😍">Loved them! 😍</option>
+                <option value="They were okay 😐">They were okay 😐</option>
+                <option value="Not helpful 💩">Not helpful 💩</option>
+            </select>
+            <br><br>
+            <button type="submit">Submit Feedback</button>
+        </form>
+        {% else %}
+        <p>No recommendations found. Something went wrong.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# PyCharm
+.idea/
+
+# Logs
+*.log
+
+# Compiled files
+*.out
+
+# Data files too large for Git
+data/*.csv
+data/*.pth
+data/*.tsv
+
+# Backup files
+*.bak
+*.swp
+
+# Feedback, user uploads
+data/user_feedback.csv

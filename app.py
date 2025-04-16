@@ -4,6 +4,8 @@ import torch
 import torch.nn as nn
 import os
 import logging
+from data_downloader import download_data
+download_data()
 
 from model.ncf_model import NCF
 from model.utils import load_data

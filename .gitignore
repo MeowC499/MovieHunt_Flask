@@ -40,3 +40,6 @@ data/*.tsv
 
 # Feedback, user uploads
 data/user_feedback.csv
+
+data/*.csv
+data/*.pth

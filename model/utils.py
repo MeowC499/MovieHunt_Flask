@@ -17,7 +17,6 @@ def load_data():
         "ratings.csv": "https://drive.google.com/uc?id=1Xuh5ZuI2RnBZ2f-nuKAkrI29dwaRzSXP",
         "movies.csv": "https://drive.google.com/uc?id=1P5p6bpyVA_uTGGeYq5PiK-MwIUZ5sIi1",
         "links.csv": "https://drive.google.com/uc?id=1AtRiQ0-X5KuZFjnPWcPj1kpqDe3KZUWq",
-        "genome-scores.csv": "https://drive.google.com/uc?id=1VTdzDeknOLCuO6CQq0QyJYjZvFj8SG7r",
         "ncf_model_state.pth": "https://drive.google.com/uc?id=1-5JsDtm_EF3qwvTopoWDEUu17FVfYEaV"
     }
 
@@ -28,7 +27,6 @@ def load_data():
     ratings = pd.read_csv("data/ratings.csv")
     movies = pd.read_csv("data/movies.csv")
     links = pd.read_csv("data/links.csv")
-    scores = pd.read_csv("data/genome-scores.csv")
 
     # Label encoding
     user_encoder = LabelEncoder().fit(ratings["userId"])

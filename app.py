@@ -22,12 +22,13 @@ logging.basicConfig(
     ]
 )
 
-# GDrive file IDs
+# File IDs for Google Drive downloads
 MODEL_PATH = "data/ncf_model_state.pth"
 MODEL_ID = "1-5JsDtm_EF3qwvTopoWDEUu17FVfYEaV"
-CSV_FILES = {
-    "data/movies.csv": "1P5p6bpyVA_uTGGeYq5PiK-MwIUZ5sIi1",
-    "data/ratings.csv": "1Xuh5ZuI2RnBZ2f-nuKAkrI29dwaRzSXP"
+
+PKL_FILES = {
+    "data/movies.pkl": "16XFCLqEsqBnvifZni--FEiwX6B5k-UXV",
+    "data/ratings.pkl": "1Uq8o0PSZNgsQ-ESQ15TBcvifIfY_GRtT"
 }
 
 data = None
@@ -54,60 +55,37 @@ def download_file_from_gdrive(file_id, destination):
                 f.write(chunk)
     logging.info(f"Downloaded: {destination}")
 
-def validate_csv(path):
-    """Ensure the CSV has proper content after downloading."""
-    try:
-        df = pd.read_csv(path)
-        if "title" not in df.columns:
-            raise ValueError(f"'title' column missing in {path}")
-        logging.info(f"✅ Validated CSV: {path} with {len(df)} rows")
-    except Exception as e:
-        logging.error(f"❌ CSV validation failed for {path}: {e}")
-        # Optional: delete bad file so it re-downloads next time
-        try:
-            os.remove(path)
-            logging.warning(f"Removed invalid file: {path}")
-        except:
-            pass
-
 def download_data():
-    for path, file_id in CSV_FILES.items():
+    for path, file_id in PKL_FILES.items():
         if not os.path.exists(path):
-            logging.info(f"📦 Downloading data file: {path}")
+            logging.info(f"📦 Downloading pickle file: {path}")
             download_file_from_gdrive(file_id, path)
-        validate_csv(path)  # <- Validate after download
-
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
-        logging.info("Downloading model...")
+        logging.info("📥 Downloading model...")
         download_file_from_gdrive(MODEL_ID, MODEL_PATH)
 
 def load_data():
     try:
-        all_movies = pd.read_csv("data/movies.csv")
-        logging.info(f"Actual columns: {list(all_movies.columns)}")  # <== Add this line
-
+        all_movies = pd.read_pickle("data/movies.pkl")
         if os.path.exists("data/user_feedback.csv"):
             user_feedback = pd.read_csv("data/user_feedback.csv")
         else:
             user_feedback = pd.DataFrame(columns=["username", "favorites", "feedback"])
 
-        unique_users = user_feedback["username"].dropna().unique().tolist()
-        if not unique_users:
-            unique_users = ["default_user"]
-
-        user_to_index = {user: idx for idx, user in enumerate(unique_users)}
+        user_to_index = {user: idx for idx, user in enumerate(user_feedback["username"].dropna().unique())}
         movie_to_index = {row["movieId"]: idx for idx, row in all_movies.iterrows()}
 
-        logging.info(f"Loaded {len(all_movies)} movies and {len(user_to_index)} users.")
+        logging.info(f"✅ Loaded {len(all_movies)} movies and {len(user_to_index)} users from pickle.")
         return {
             "all_movies": all_movies,
             "user_to_index": user_to_index,
             "movie_to_index": movie_to_index
         }
+
     except Exception as e:
-        logging.error(f"Failed to load data: {e}")
+        logging.error(f"❌ Failed to load pickle data: {e}")
         return {
             "all_movies": pd.DataFrame(),
             "user_to_index": {"fallback": 0},
@@ -117,7 +95,7 @@ def load_data():
 def initialize_app():
     global data, model
     if data is None or model is None:
-        logging.info("Initializing app data and model...")
+        logging.info("🚀 Initializing app data and model...")
         download_data()
         download_model()
         data = load_data()
@@ -135,30 +113,26 @@ def initialize_app():
             try:
                 model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device("cpu")))
                 model.eval()
-                logging.info("Model loaded successfully.")
+                logging.info("✅ Model loaded successfully.")
             except Exception as e:
-                logging.warning(f"Failed to load model state: {e}")
+                logging.warning(f"⚠️ Failed to load model state: {e}")
                 model = None
         else:
-            logging.warning("Model file missing. Using fallback mode.")
+            logging.warning("⚠️ Model file missing. Using fallback mode.")
             model = None
 
 @app.route("/", methods=["GET"])
 def index():
     initialize_app()
-
-    # Sanity check
     if "title" not in data["all_movies"].columns:
-        logging.error("🚨 'title' column not found in movies.csv")
+        logging.error("🚨 'title' column not found in movies.pkl")
         titles = ["Fallback Movie"]
     else:
         titles = data["all_movies"]["title"].dropna().tolist()
-        logging.info(f"✅ Loaded {len(titles)} movie titles")
-        logging.info(f"First few titles: {titles[:5]}")
+        logging.info(f"✅ Loaded {len(titles)} movie titles for dropdown")
+        logging.info(f"Sample titles: {titles[:5]}")
 
     return render_template("index.html", titles=titles)
-
-
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
@@ -202,7 +176,7 @@ def recommend():
                     sim = torch.nn.functional.cosine_similarity(user_embedding.unsqueeze(0), movie_emb).item()
                     predictions.append((row["title"], sim))
                 except Exception as e:
-                    logging.warning(f"Prediction failed for '{row['title']}': {e}")
+                    logging.warning(f"⚠️ Prediction failed for '{row['title']}': {e}")
 
         top_recs = sorted(predictions, key=lambda x: x[1], reverse=True)[:20]
         if not top_recs:
@@ -218,17 +192,17 @@ def feedback():
     selected_movies = request.form.get("favorites")
     user_feedback = request.form.get("feedback")
 
-    logging.info(f"Feedback from {username}: {user_feedback}")
+    logging.info(f"📝 Feedback from {username}: {user_feedback}")
 
     try:
         with open("data/user_feedback.csv", "a", encoding="utf-8") as f:
             f.write(f"{username},{selected_movies},{user_feedback}\n")
     except Exception as e:
-        logging.warning(f"Feedback saving failed: {e}")
+        logging.warning(f"⚠️ Feedback saving failed: {e}")
 
     return render_template("thankyou.html")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    logging.info(f"Starting app on port {port}")
+    logging.info(f"🌐 Starting app on port {port}")
     app.run(host="0.0.0.0", port=port)

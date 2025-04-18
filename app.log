@@ -1,0 +1,71 @@
+2025-04-15 19:04:42,331 - INFO - Flask app initialized
+2025-04-15 19:04:51,072 - INFO - Data loaded successfully
+2025-04-15 19:04:51,611 - INFO - Mappings created
+2025-04-15 19:04:51,954 - INFO - Model loaded successfully
+2025-04-15 19:04:51,958 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:04:52,022 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-15 19:04:52,022 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-15 19:04:52,025 - INFO -  * Restarting with stat
+2025-04-15 19:04:56,435 - INFO - Flask app initialized
+2025-04-15 19:05:06,156 - INFO - Data loaded successfully
+2025-04-15 19:05:06,635 - INFO - Mappings created
+2025-04-15 19:05:06,919 - INFO - Model loaded successfully
+2025-04-15 19:05:06,920 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:05:06,940 - WARNING -  * Debugger is active!
+2025-04-15 19:05:06,970 - INFO -  * Debugger PIN: 114-649-651
+2025-04-15 19:05:07,647 - INFO - 127.0.0.1 - - [15/Apr/2025 19:05:07] "GET / HTTP/1.1" 200 -
+2025-04-15 19:05:08,411 - INFO - 127.0.0.1 - - [15/Apr/2025 19:05:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-15 19:05:39,805 - INFO - Received input - username: meowc, favorites: ['1 Chance 2 Dance (2014)', '1 Mile to You (2017)', '10 Attitudes (2001)']
+2025-04-15 19:05:39,806 - INFO - 127.0.0.1 - - [15/Apr/2025 19:05:39] "POST / HTTP/1.1" 200 -
+2025-04-15 19:11:22,394 - INFO -  * Restarting with stat
+2025-04-15 19:11:26,787 - INFO - Flask app initialized
+2025-04-15 19:11:35,292 - INFO - Data loaded successfully
+2025-04-15 19:11:35,783 - INFO - Mappings created
+2025-04-15 19:11:36,058 - INFO - Model loaded successfully
+2025-04-15 19:11:36,061 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:11:36,083 - WARNING -  * Debugger is active!
+2025-04-15 19:11:36,105 - INFO -  * Debugger PIN: 114-649-651
+2025-04-15 19:29:58,257 - INFO - Flask app initialized
+2025-04-15 19:30:05,406 - INFO - Data loaded successfully
+2025-04-15 19:30:05,879 - INFO - Mappings created
+2025-04-15 19:30:06,145 - INFO - Model loaded successfully
+2025-04-15 19:30:06,146 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:30:06,191 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-15 19:30:06,192 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-15 19:30:06,196 - INFO -  * Restarting with stat
+2025-04-15 19:30:09,720 - INFO - Flask app initialized
+2025-04-15 19:30:19,274 - INFO - Data loaded successfully
+2025-04-15 19:30:19,752 - INFO - Mappings created
+2025-04-15 19:30:20,016 - INFO - Model loaded successfully
+2025-04-15 19:30:20,017 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:30:20,040 - WARNING -  * Debugger is active!
+2025-04-15 19:30:20,065 - INFO -  * Debugger PIN: 499-138-102
+2025-04-15 19:34:38,950 - INFO - 127.0.0.1 - - [15/Apr/2025 19:34:38] "GET / HTTP/1.1" 200 -
+2025-04-15 19:34:53,865 - INFO - Received input - username: yan.chi@woodfrod.kyschools.us, favorites: ["10 Billion: What's On Your Plate (2015)"], feedback: None
+2025-04-15 19:34:53,924 - INFO - 127.0.0.1 - - [15/Apr/2025 19:34:53] "POST / HTTP/1.1" 200 -
+2025-04-15 19:41:18,212 - INFO - Flask app initialized
+2025-04-15 19:41:26,037 - INFO - Data loaded successfully
+2025-04-15 19:41:26,516 - INFO - Mappings created
+2025-04-15 19:41:26,741 - INFO - Model loaded successfully
+2025-04-15 19:41:26,743 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:41:26,790 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-15 19:41:26,790 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-15 19:41:26,793 - INFO -  * Restarting with stat
+2025-04-15 19:41:30,669 - INFO - Flask app initialized
+2025-04-15 19:41:38,653 - INFO - Data loaded successfully
+2025-04-15 19:41:39,152 - INFO - Mappings created
+2025-04-15 19:41:39,419 - INFO - Model loaded successfully
+2025-04-15 19:41:39,420 - INFO - Starting Flask server on http://127.0.0.1:5000
+2025-04-15 19:41:39,440 - WARNING -  * Debugger is active!
+2025-04-15 19:41:39,462 - INFO -  * Debugger PIN: 499-138-102
+2025-04-15 19:41:39,779 - INFO - Received input - username: yan.chi@woodfrod.kyschools.us, favorites: ["10 Billion: What's On Your Plate (2015)"], feedback: None
+2025-04-15 19:41:39,839 - INFO - 127.0.0.1 - - [15/Apr/2025 19:41:39] "POST / HTTP/1.1" 200 -
+2025-04-15 19:42:18,727 - INFO - Received input - username: MeowC, favorites: ['10 Minutes (2014)'], feedback: None
+2025-04-15 19:42:18,790 - INFO - 127.0.0.1 - - [15/Apr/2025 19:42:18] "POST / HTTP/1.1" 200 -
+2025-04-15 20:13:37,763 - INFO - Received input - username: MeowC, favorites: ['10 Minutes (2014)'], feedback: None
+2025-04-15 20:13:37,832 - INFO - 127.0.0.1 - - [15/Apr/2025 20:13:37] "POST / HTTP/1.1" 200 -
+2025-04-15 20:14:13,819 - INFO - 127.0.0.1 - - [15/Apr/2025 20:14:13] "[33mPOST /recommend HTTP/1.1[0m" 404 -
+2025-04-15 20:27:50,562 - INFO -  * Restarting with stat

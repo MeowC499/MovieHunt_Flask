@@ -22,13 +22,13 @@ ENV/
 Thumbs.db
 
 # Logs and backups
-*.log
+#*.log
 *.out
 *.bak
 *.swp
 
 # Data files too large for Git
-data/*.csv
-data/*.tsv
-data/*.pth
-data/user_feedback.csv
+#data/*.csv
+#data/*.tsv
+#data/*.pth
+#data/user_feedback.csv

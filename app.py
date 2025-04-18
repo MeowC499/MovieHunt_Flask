@@ -149,16 +149,17 @@ def initialize_app():
 def index():
     initialize_app()
 
-    # Debug log for what's actually being loaded
-    if not data["all_movies"].empty:
-        sample_titles = data["all_movies"]["title"].dropna().head(5).tolist()
-        logging.info(f"Sample movie titles: {sample_titles}")
-        titles = data["all_movies"]["title"].dropna().tolist()
+    # Sanity check
+    if "title" not in data["all_movies"].columns:
+        logging.error("🚨 'title' column not found in movies.csv")
+        titles = ["Fallback Movie"]
     else:
-        logging.warning("No movie data loaded. Showing fallback titles.")
-        titles = ["Shrek", "The Matrix", "Cats (2019)", "Dummy Movie 1"]
+        titles = data["all_movies"]["title"].dropna().tolist()
+        logging.info(f"✅ Loaded {len(titles)} movie titles")
+        logging.info(f"First few titles: {titles[:5]}")
 
     return render_template("index.html", titles=titles)
+
 
 
 @app.route("/recommend", methods=["POST"])

@@ -6,7 +6,7 @@ import os
 import logging
 import requests
 import gdown
-
+import numpy as np
 from model.ncf_model import NCF
 
 app = Flask(__name__)

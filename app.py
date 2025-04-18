@@ -27,11 +27,7 @@ MODEL_PATH = "data/ncf_model_state.pth"
 MODEL_ID = "1-5JsDtm_EF3qwvTopoWDEUu17FVfYEaV"
 CSV_FILES = {
     "data/movies.csv": "1P5p6bpyVA_uTGGeYq5PiK-MwIUZ5sIi1",
-    "data/ratings.csv": "1Xuh5ZuI2RnBZ2f-nuKAkrI29dwaRzSXP",
-    "data/links.csv": "1AtRiQ0-X5KuZFjnPWcPj1kpqDe3KZUWq",
-    "data/genome-tags.csv": "1ijNcsOK2b0Yenl2q8AgGYJwqLAbbtBEb",
-    "data/genome-scores.csv": "1VTdzDeknOLCuO6CQq0QyJYjZvFj8SG7r",
-    "data/tags.csv": "1F56JAP1jC5Ia1-3eB1tJajpFOiuY0Gfb"
+    "data/ratings.csv": "1Xuh5ZuI2RnBZ2f-nuKAkrI29dwaRzSXP"
 }
 
 data = None
@@ -90,6 +86,8 @@ def download_model():
 def load_data():
     try:
         all_movies = pd.read_csv("data/movies.csv")
+        logging.info(f"Actual columns: {list(all_movies.columns)}")  # <== Add this line
+
         if os.path.exists("data/user_feedback.csv"):
             user_feedback = pd.read_csv("data/user_feedback.csv")
         else:

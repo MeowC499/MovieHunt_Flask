@@ -5,6 +5,7 @@ import torch.nn as nn
 import os
 import logging
 import requests
+import gdown
 
 from model.ncf_model import NCF
 
@@ -34,26 +35,16 @@ PKL_FILES = {
 data = None
 model = None
 
-def get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith("download_warning"):
-            return value
-    return None
-
 def download_file_from_gdrive(file_id, destination):
     URL = "https://docs.google.com/uc?export=download"
     session = requests.Session()
     response = session.get(URL, params={'id': file_id}, stream=True)
-    token = get_confirm_token(response)
-    if token:
-        response = session.get(URL, params={'id': file_id, 'confirm': token}, stream=True)
-
     os.makedirs(os.path.dirname(destination), exist_ok=True)
     with open(destination, "wb") as f:
         for chunk in response.iter_content(32768):
             if chunk:
                 f.write(chunk)
-    logging.info(f"Downloaded: {destination}")
+    logging.info(f"📥 Downloaded: {destination}")
 
 def download_data():
     for path, file_id in PKL_FILES.items():
@@ -63,8 +54,12 @@ def download_data():
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
-        logging.info("📥 Downloading model...")
-        download_file_from_gdrive(MODEL_ID, MODEL_PATH)
+        logging.info("📥 Downloading model using gdown...")
+        try:
+            gdown.download(f"https://drive.google.com/uc?id={MODEL_ID}", MODEL_PATH, quiet=False)
+            logging.info("✅ Model downloaded via gdown.")
+        except Exception as e:
+            logging.error(f"❌ Failed to download model: {e}")
 
 def load_data():
     try:

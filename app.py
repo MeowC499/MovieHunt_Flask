@@ -58,11 +58,29 @@ def download_file_from_gdrive(file_id, destination):
                 f.write(chunk)
     logging.info(f"Downloaded: {destination}")
 
+def validate_csv(path):
+    """Ensure the CSV has proper content after downloading."""
+    try:
+        df = pd.read_csv(path)
+        if "title" not in df.columns:
+            raise ValueError(f"'title' column missing in {path}")
+        logging.info(f"✅ Validated CSV: {path} with {len(df)} rows")
+    except Exception as e:
+        logging.error(f"❌ CSV validation failed for {path}: {e}")
+        # Optional: delete bad file so it re-downloads next time
+        try:
+            os.remove(path)
+            logging.warning(f"Removed invalid file: {path}")
+        except:
+            pass
+
 def download_data():
     for path, file_id in CSV_FILES.items():
         if not os.path.exists(path):
-            logging.info(f"Downloading data file: {path}")
+            logging.info(f"📦 Downloading data file: {path}")
             download_file_from_gdrive(file_id, path)
+        validate_csv(path)  # <- Validate after download
+
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
@@ -130,8 +148,18 @@ def initialize_app():
 @app.route("/", methods=["GET"])
 def index():
     initialize_app()
-    titles = data["all_movies"]["title"].dropna().tolist() if not data["all_movies"].empty else []
+
+    # Debug log for what's actually being loaded
+    if not data["all_movies"].empty:
+        sample_titles = data["all_movies"]["title"].dropna().head(5).tolist()
+        logging.info(f"Sample movie titles: {sample_titles}")
+        titles = data["all_movies"]["title"].dropna().tolist()
+    else:
+        logging.warning("No movie data loaded. Showing fallback titles.")
+        titles = ["Shrek", "The Matrix", "Cats (2019)", "Dummy Movie 1"]
+
     return render_template("index.html", titles=titles)
+
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
